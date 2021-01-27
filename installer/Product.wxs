@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi" xmlns:util="http://schemas.microsoft.com/wix/UtilExtension">
+	<Product Id="*" Name="Automatic VPN Control" Language="1033" Version="0.5.1" Manufacturer="Teaglu, LLC" UpgradeCode="fb3df809-4436-411f-beb7-343f1db52e6a">
+		<Package InstallerVersion="301" Compressed="yes" InstallScope="perMachine" Platform="x64" InstallPrivileges="elevated" />
+
+		<MajorUpgrade DowngradeErrorMessage="A newer version of [ProductName] is already installed." />
+		<MediaTemplate EmbedCab="yes" />
+
+		<Feature Id="ProductFeature" Title="installer" Level="1">
+			<ComponentGroupRef Id="ProductComponents" />
+		</Feature>
+
+		<!-- Pull in the VC++ runtime in case it isn't installed for whatever reason -->
+		<!-- Removed because static-linking seems to work fine, and churning VS versions is causing forced reboots  by the updater-->
+		<!--
+		<Feature Id="VCRedist" Title="Visual C++ 14.0 Runtime" AllowAdvertise="no" Display="hidden" Level="1">
+			<MergeRef Id="VCRedist"/>
+		</Feature>
+		-->
+
+		<Icon Id="teaglu" SourceFile="teaglu.ico"/>
+		<Property Id="ARPPRODUCTICON" Value="teaglu"/>
+		<Property Id="MSIRESTARTMANAGERCONTROL" Value="Disable"/>
+	</Product>
+
+	<Fragment>
+		<Directory Id="TARGETDIR" Name="SourceDir">
+			<Directory Id="ProgramFiles64Folder">
+				<Directory Id="CompanyFolder" Name="Teaglu">
+					<Directory Id="INSTALLFOLDER" Name="autovpn"/>
+				</Directory>
+			</Directory>
+		</Directory>
+		<!--
+		<DirectoryRef Id="TARGETDIR">
+			<Merge Id="VCRedist" SourceFile="C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Redist\MSVC\14.28.29325\MergeModules\Microsoft_VC142_CRT_x64.msm" DiskId="1" Language="0"/>
+		</DirectoryRef>
+		-->
+	</Fragment>
+
+	<Fragment>
+		<ComponentGroup Id="ProductComponents" Directory="INSTALLFOLDER" Source="..\x64\Release">
+			<Component Id="cmpMainExe" Guid="{50c1c753-8674-4065-99aa-63472717cdc6}" Win64="yes">
+				<File Id="mainApp" Name="autovpn.exe">
+				</File>
+				<File Id="sessionApp" Name="autovpnui.exe">
+				</File>
+				<ServiceInstall
+					Id="autovpn"
+					Type="ownProcess"
+					Name="autovpn"
+					DisplayName="Automatic VPN Control"
+					Description="Starts and Stops VPN based on Location"
+					Start="auto"
+					ErrorControl="normal">
+					<!-- Allow any authenticated user to start/stop.  In the case where the list is wrong and the
+						program is doing the wrong thing in the field, we want the user to have the rights to just
+						turn off the service. -->
+					<util:PermissionEx User="Authenticated Users" ServiceStart="yes" ServiceStop="yes"/>
+				</ServiceInstall>
+				<ServiceControl
+					Id="autovpn"
+					Start="install"
+					Stop="uninstall"
+					Remove="uninstall"
+					Name="autovpn"
+					Wait="yes"/>
+			</Component>
+
+			<Component Id="cmpRegistry" Guid="{c665f5ec-f272-476c-a8fb-239b83ea68a8}" Win64="yes">
+				<RegistryKey Root="HKLM" Key="SOFTWARE\Microsoft\Windows\CurrentVersion\Run" ForceCreateOnInstall="no" ForceDeleteOnUninstall="no">
+					<RegistryValue Type="string" Name="TSSession" Value="[INSTALLFOLDER]autovpnui.exe"/>
+				</RegistryKey>
+				<RegistryKey Root="HKLM" Key="SOFTWARE\Teaglu\Updater\Products\autovpn" ForceCreateOnInstall="yes" ForceDeleteOnUninstall="yes">
+					<!-- This is for the Teaglu Software Updater.  If you don't use that it does nothing.  -->
+					<RegistryValue Type="string" Name="InstalledVersion" Value="0.5.1"/>
+				</RegistryKey>
+
+				<RegistryKey Root="HKLM" Key="Software\Teaglu">
+					<RegistryKey Key="AutoVPN">
+						<RegistryKey Key="InternalNetworks">
+						</RegistryKey>
+					</RegistryKey>
+					<RegistryKey Key="Suggestions">
+						<RegistryValue Type="string" Name="WIFI_SIGNAL_LOW"
+									   Value="Your wifi signal is too low for reliable communications.  Move closer to an access point."/>
+						<RegistryValue Type="string" Name="WIFI_RATE_LOW"
+									   Value="Your wifi is connected at a very low speed.  Move closer to an access point."/>
+						<RegistryValue Type="string" Name="V1_NCSI_INTERCEPT"
+									   Value="You are connected to a network that requires you to log in or accept terms and conditions.  Open a web browser."/>
+						<RegistryValue Type="string" Name="V1_NCSI_FAILURE"
+									   Value="The network you are connected to is not connected to the internet.  Find another network to use."/>
+						<RegistryValue Type="string" Name="V1_ENCSI_INTERCEPT"
+									   Value="The network you are connected to is intercepting encrypted connections.  Find another network to use."/>
+						<RegistryValue Type="string" Name="V1_ENCSI_FAILURE"
+									   Value="The network you are connected to does not allow encrypted connections.  Find another network to use."/>
+					</RegistryKey>
+				</RegistryKey>
+			</Component>
+		</ComponentGroup>
+	</Fragment>
+</Wix>

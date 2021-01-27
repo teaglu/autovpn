@@ -1,0 +1,81 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<policyDefinitions xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" revision="1.0" schemaVersion="1.0" xmlns="http://schemas.microsoft.com/GroupPolicy/2006/07/PolicyDefinitions">
+  <policyNamespaces>
+    <target prefix="autovpn" namespace="Teaglu.Policies.AutoVPN" />
+    <using prefix="windows" namespace="Microsoft.Policies.Windows" />
+	<using prefix="teaglu" namespace="Teaglu.Policies.Base" />
+  </policyNamespaces>
+  <resources minRequiredRevision="1.0" />
+  <categories>
+    <category name="AutoVPN"
+              displayName="$(string.AutoVPN)"
+              explainText="$(string.AutoVPN_Explain)">
+	  <parentCategory ref="teaglu:TeagluCategory"/>
+	</category>
+  </categories>
+  <policies>
+    <policy name="VPNServiceName" class="Machine" displayName="$(string.VPNServiceName)" presentation="$(presentation.VPNServiceName)" explainText="$(string.VPNServiceName_Explain)" key="Software\Policies\Teaglu\AutoVPN">
+	  <parentCategory ref="AutoVPN"/>
+      <supportedOn ref="windows:SUPPORTED_Windows7" />
+      <elements>
+        <text id="VPNServiceName" valueName="VPNServiceName" required="true" />
+      </elements>
+    </policy>
+    <policy name="InternalNetworks" class="Machine" displayName="$(string.InternalNetworks)" presentation="$(presentation.InternalNetworks)" explainText="$(string.InternalNetworks_Explain)" key="Software\Policies\Teaglu\AutoVPN\InternalNetworks">
+	  <parentCategory ref="AutoVPN"/>
+      <supportedOn ref="windows:SUPPORTED_Windows7" />
+      <elements>
+        <text id="InternalNetworks" valueName="Policy" required="true" />
+      </elements>
+    </policy>
+    <policy name="WifiSignalWarningLimit" class="Machine" displayName="$(string.WifiSignalWarningLimit)" presentation="$(presentation.WifiSignalWarningLimit)" explainText="$(string.WifiSignalWarningLimit_Explain)" key="Software\Policies\Teaglu\AutoVPN">
+	  <parentCategory ref="AutoVPN"/>
+      <supportedOn ref="windows:SUPPORTED_Windows7" />
+      <elements>
+        <decimal id="WifiSignalWarningLimit" valueName="WifiSignalWarningLimit" required="true" minValue="0" maxValue="100" />
+      </elements>
+    </policy>
+    <policy name="WifiRxRateWarningLimit" class="Machine" displayName="$(string.WifiRxRateWarningLimit)" presentation="$(presentation.WifiRxRateWarningLimit)" explainText="$(string.WifiRxRateWarningLimit_Explain)" key="Software\Policies\Teaglu\AutoVPN">
+	  <parentCategory ref="AutoVPN"/>
+      <supportedOn ref="windows:SUPPORTED_Windows7" />
+      <elements>
+        <decimal id="WifiRxRateWarningLimit" valueName="WifiRxRateWarningLimit" required="true" minValue="0" maxValue="999999999" spin="false" />
+      </elements>
+    </policy>
+    <policy name="WifiTxRateWarningLimit" class="Machine" displayName="$(string.WifiTxRateWarningLimit)" presentation="$(presentation.WifiTxRateWarningLimit)" explainText="$(string.WifiTxRateWarningLimit_Explain)" key="Software\Policies\Teaglu\AutoVPN">
+	  <parentCategory ref="AutoVPN"/>
+      <supportedOn ref="windows:SUPPORTED_Windows7" />
+      <elements>
+        <decimal id="WifiTxRateWarningLimit" valueName="WifiTxRateWarningLimit" required="true" minValue="0" maxValue="999999999" spin="false"/>
+      </elements>
+    </policy>
+    <policy name="UnencryptedInternetUrl" class="Machine" displayName="$(string.UnencryptedInternetUrl)" presentation="$(presentation.UnencryptedInternetUrl)" explainText="$(string.UnencryptedInternetUrl_Explain)" key="Software\Policies\Teaglu\AutoVPN">
+	  <parentCategory ref="AutoVPN"/>
+      <supportedOn ref="windows:SUPPORTED_Windows7" />
+      <elements>
+        <text id="UnencryptedInternetUrl" valueName="UnencryptedInternetUrl" required="true" />
+      </elements>
+    </policy>
+    <policy name="UnencryptedInternetContent" class="Machine" displayName="$(string.UnencryptedInternetContent)" presentation="$(presentation.UnencryptedInternetContent)" explainText="$(string.UnencryptedInternetContent_Explain)" key="Software\Policies\Teaglu\AutoVPN">
+	  <parentCategory ref="AutoVPN"/>
+      <supportedOn ref="windows:SUPPORTED_Windows7" />
+      <elements>
+        <text id="UnencryptedInternetContent" valueName="UnencryptedInternetContent" required="true" />
+      </elements>
+    </policy>
+    <policy name="EncryptedInternetUrl" class="Machine" displayName="$(string.EncryptedInternetUrl)" presentation="$(presentation.EncryptedInternetUrl)" explainText="$(string.EncryptedInternetUrl_Explain)" key="Software\Policies\Teaglu\AutoVPN">
+	  <parentCategory ref="AutoVPN"/>
+      <supportedOn ref="windows:SUPPORTED_Windows7" />
+      <elements>
+        <text id="EncryptedInternetUrl" valueName="EncryptedInternetUrl" required="true" />
+      </elements>
+    </policy>
+    <policy name="EncryptedInternetContent" class="Machine" displayName="$(string.EncryptedInternetContent)" presentation="$(presentation.EncryptedInternetContent)" explainText="$(string.EncryptedInternetContent_Explain)" key="Software\Policies\Teaglu\AutoVPN">
+	  <parentCategory ref="AutoVPN"/>
+      <supportedOn ref="windows:SUPPORTED_Windows7" />
+      <elements>
+        <text id="EncryptedInternetContent" valueName="EncryptedInternetContent" required="true" />
+      </elements>
+    </policy>
+  </policies>
+</policyDefinitions>

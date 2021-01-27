@@ -1,0 +1,86 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<policyDefinitionResources xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+   xmlns="https://schemas.microsoft.com/GroupPolicy/2006/07/PolicyDefinitions"
+   revision="1.0" schemaVersion="1.0">
+  <displayName>Teaglu Company Base</displayName>
+  <description>This file contains the Teaglu parent category.</description>
+  <resources>
+    <stringTable>
+      <string id="AutoVPN">AutoVPN</string>
+	  <string id="AutoVPN_Explain">Contains configuration settings for the AutoVPN software.</string>
+	  <string id="VPNServiceName">VPN Service Name</string>
+	  <string id="VPNServiceName_Explain">The service name corresponding to the VPN which should be controlled to start or stop the connection to the corporate network.</string>
+	  <string id="InternalNetworks">Internal Networks</string>
+	  <string id="InternalNetworks_Explain">A common-seperated list of subnets in the format x.x.x.x/n or x.x.x.x/y.y.y.y.
+		
+This subnet does not have to exactly match what is present on the computer's network interfaces - it can be a larger subnet that includes the subnet which appears on the computer's network interface. This corresponds to an "orlonger" match.</string>
+      <string id="WifiSignalWarningLimit">Wifi Signal Warning Limit</string>
+	  <string id="WifiSignalWarningLimit_Explain">This is a value between 0 to 100 indicating the signal strength, where 0 corresponds to -100dbm and 100 corresponds to -50dbm.  If the signal strength of the active association falls below this value a warning is shown to the user.</string>
+	  <string id="WifiRxRateWarningLimit">Wifi Rx Speed Warning Limit</string>
+	  <string id="WifiRxRateWarningLimit_Explain">This is a value in kilobits/second.  If the receive rate falls below this limit, a warning is shown to the user.</string>
+	  <string id="WifiTxRateWarningLimit">Wifi Tx Speed Warning Limit</string>
+	  <string id="WifiTxRateWarningLimit_Explain">This is a value in kilobits/second.  If the transmit rate falls below this limit, a warning is shown to the user.</string>
+	  <string id="UnencryptedInternetUrl">Unencrypted Verification URL</string>
+	  <string id="UnencryptedInternetUrl_Explain">This value is a URL which is retrieved as part of diagnostics, to determine internet connectivity as well as determine if there is a captive portal in the way.  This serves the same function as Microsoft NCSI, and if this key is not present the value "http://www.msftncsi.com/ncsi.txt" is used.</string>
+	  <string id="UnencryptedInternetContent">Unencrypted Verification Expected Content</string>
+	  <string id="UnencryptedInternetContent_Explain">This value is compared to the result of retrieving the unencrypted internet URL to determine if a captive portal is in place.  If this key is not present the value "Microsoft NCSI" is used.</string>
+	  <string id="EncryptedInternetUrl">Encrypted Verification URL</string>
+	  <string id="EncryptedInternetUrl_Explain">If the unencrypted internet URL is retrieved and shows no issues, this URL is retrieved to determine the usability of HTTPS connections.  If the connection fails with a security or TLS failure, it is assumed that there is an SSL Inspection firewall in the way which will most likely prohibit encrypted connections.
+	  
+Note that if you have a root certificate installed for *your* SSL Inspection firewall, this check will not fail because the WinHttp library is used for the check, and that library uses the windows certificate store.</string>
+	  <string id="EncryptedInternetContent">Encrypted Verification Expected Content</string>
+	  <string id="EncryptedInternetContent_Explain">This value is compared to the result of the encrypted internet URL, to determine if content is being changed in transit.  This is effectively an encrypted form of NCSI.</string>	  
+    </stringTable>
+	<presentationTable>
+	  <presentation id="VPNServiceName">
+        <textBox refId="VPNServiceName">
+          <label>VPN Service Name</label>
+          <defaultValue>OpenVPNService</defaultValue>
+        </textBox>
+	  </presentation>
+	  <presentation id="InternalNetworks">
+	    <textBox refId="InternalNetworks">
+		  <label>Internal Networks</label>
+		  <defaultValue></defaultValue>
+		</textBox>
+	  </presentation>
+	  <presentation id="WifiSignalWarningLimit">
+	    <decimalTextBox refId="WifiSignalWarningLimit" defaultValue="50">
+		</decimalTextBox>
+	  </presentation>
+	  <presentation id="WifiRxRateWarningLimit">
+	    <decimalTextBox refId="WifiRxRateWarningLimit" defaultValue="10000">
+		</decimalTextBox>
+	  </presentation>
+	  <presentation id="WifiTxRateWarningLimit">
+	    <decimalTextBox refId="WifiTxRateWarningLimit" defaultValue="10000">
+		</decimalTextBox>
+	  </presentation>
+	  <presentation id="UnencryptedInternetUrl">
+        <textBox refId="UnencryptedInternetUrl">
+          <label>Unencrypted Verification URL</label>
+          <defaultValue>http://www.msftncsi.com/ncsi.txt</defaultValue>
+        </textBox>
+	  </presentation>
+	  <presentation id="UnencryptedInternetContent">
+        <textBox refId="UnencryptedInternetContent">
+          <label>Unencrypted Verification Expected Content</label>
+          <defaultValue>Microsoft NCSI</defaultValue>
+        </textBox>
+	  </presentation>
+	  <presentation id="EncryptedInternetUrl">
+        <textBox refId="EncryptedInternetUrl">
+          <label>Encrypted Verification URL</label>
+          <defaultValue></defaultValue>
+        </textBox>
+	  </presentation>
+	  <presentation id="EncryptedInternetContent">
+        <textBox refId="EncryptedInternetContent">
+          <label>Encrypted Verification Expected Content</label>
+          <defaultValue></defaultValue>
+        </textBox>
+	  </presentation>
+	</presentationTable>
+  </resources>
+</policyDefinitionResources>

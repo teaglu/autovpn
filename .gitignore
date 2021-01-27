@@ -1,0 +1,11 @@
+/.vs/
+/autovpn/x64/Debug/
+/autovpn/x64/Release/
+/autovpnui/x64/Debug/
+/autovpnui/x64/Release/
+/installer/AutoVPN_ADMX_*.zip
+/installer/bin/Release/
+/installer/obj/
+/x64/Release/
+/x64/Debug/
+/installer/upload.bat
