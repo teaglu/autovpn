@@ -10,11 +10,15 @@ This project is designed to:
 
 ## Installation
 
-You are more than welcome to compile your own version, but Teaglu provides OV-Signed installation packages at [this location](https://software.teaglu.com/software/autovpn/).
+You are more than welcome to compile your own version, but or you can use the OV-Signed installation packages at [this location](https://software.teaglu.com/software/autovpn/).
 
 The main portion of the program runs as a service, so the user does not need to have administrative priviliges.
 
-The program does not have a configuration utility - it is configured using registry entries which are expected to be pushed out via group policy.  Configuration keys are located under HKEY_LOCAL_MACHINE\Software\Teaglu\AutoVPN:
+## Configuration
+
+The program does not have a configuration utility - it is configured using registry entries which are expected to be pushed out via group policy.  Configuration is done first by checking for policy keys under HKEY_LOCAL_MACHINE\Software\Policies\Teaglu\AutoVPN, then checking for preference keys under HKEY_LOCAL_MACHINE\Software\Teaglu\AutoVPN.
+
+The included ADMX files can be used for configuration, or the following registry keys can be set:
 
 ### VPNServiceName
 
