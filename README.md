@@ -10,7 +10,7 @@ This project is designed to:
 
 ## Installation
 
-You are more than welcome to compile your own version, but or you can use the OV-Signed installation packages at [this location](https://software.teaglu.com/software/autovpn/).
+You are more than welcome to compile your own version, or you can use the OV-Signed installation packages at [this location](https://software.teaglu.com/software/autovpn/).
 
 The main portion of the program runs as a service, so the user does not need to have administrative priviliges.
 

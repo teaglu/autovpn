@@ -6,7 +6,7 @@
     <ProductVersion>3.10</ProductVersion>
     <ProjectGuid>b93235fc-bb54-4638-a431-5fb5cda4f9d7</ProjectGuid>
     <SchemaVersion>2.0</SchemaVersion>
-    <OutputName>AutoVPN_0.5.1</OutputName>
+    <OutputName>AutoVPN_0.5.2</OutputName>
     <OutputType>Package</OutputType>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
