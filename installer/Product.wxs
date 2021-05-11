@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi" xmlns:util="http://schemas.microsoft.com/wix/UtilExtension">
-	<Product Id="*" Name="Automatic VPN Control" Language="1033" Version="0.5.2" Manufacturer="Teaglu, LLC" UpgradeCode="fb3df809-4436-411f-beb7-343f1db52e6a">
+	<Product Id="*" Name="Automatic VPN Control" Language="1033" Version="0.5.3" Manufacturer="Teaglu, LLC" UpgradeCode="fb3df809-4436-411f-beb7-343f1db52e6a">
 		<Package InstallerVersion="301" Compressed="yes" InstallScope="perMachine" Platform="x64" InstallPrivileges="elevated" />
 
 		<MajorUpgrade DowngradeErrorMessage="A newer version of [ProductName] is already installed." />
@@ -73,27 +73,28 @@
 				</RegistryKey>
 				<RegistryKey Root="HKLM" Key="SOFTWARE\Teaglu\Updater\Products\autovpn" ForceCreateOnInstall="yes" ForceDeleteOnUninstall="yes">
 					<!-- This is for the Teaglu Software Updater.  If you don't use that it does nothing.  -->
-					<RegistryValue Type="string" Name="InstalledVersion" Value="0.5.2"/>
+					<RegistryValue Type="string" Name="InstalledVersion" Value="0.5.3"/>
 				</RegistryKey>
 
 				<RegistryKey Root="HKLM" Key="Software\Teaglu">
 					<RegistryKey Key="AutoVPN">
 						<RegistryKey Key="InternalNetworks">
 						</RegistryKey>
-					</RegistryKey>
-					<RegistryKey Key="Suggestions">
-						<RegistryValue Type="string" Name="WIFI_SIGNAL_LOW"
-									   Value="Your wifi signal is too low for reliable communications.  Move closer to an access point."/>
-						<RegistryValue Type="string" Name="WIFI_RATE_LOW"
-									   Value="Your wifi is connected at a very low speed.  Move closer to an access point."/>
-						<RegistryValue Type="string" Name="V1_NCSI_INTERCEPT"
-									   Value="You are connected to a network that requires you to log in or accept terms and conditions.  Open a web browser."/>
-						<RegistryValue Type="string" Name="V1_NCSI_FAILURE"
-									   Value="The network you are connected to is not connected to the internet.  Find another network to use."/>
-						<RegistryValue Type="string" Name="V1_ENCSI_INTERCEPT"
-									   Value="The network you are connected to is intercepting encrypted connections.  Find another network to use."/>
-						<RegistryValue Type="string" Name="V1_ENCSI_FAILURE"
-									   Value="The network you are connected to does not allow encrypted connections.  Find another network to use."/>
+
+						<RegistryKey Key="Suggestions">
+							<RegistryValue Type="string" Name="WIFI_SIGNAL_LOW"
+										   Value="Your wifi signal is too low for reliable communications.  Move closer to an access point."/>
+							<RegistryValue Type="string" Name="WIFI_RATE_LOW"
+										   Value="Your wifi is connected at a very low speed.  Move closer to an access point."/>
+							<RegistryValue Type="string" Name="V1_NCSI_INTERCEPT"
+										   Value="You are connected to a network that requires you to log in or accept terms and conditions.  Open a web browser."/>
+							<RegistryValue Type="string" Name="V1_NCSI_FAILURE"
+										   Value="The network you are connected to is not connected to the internet.  Find another network to use."/>
+							<RegistryValue Type="string" Name="V1_ENCSI_INTERCEPT"
+										   Value="The network you are connected to is intercepting encrypted connections.  Find another network to use."/>
+							<RegistryValue Type="string" Name="V1_ENCSI_FAILURE"
+										   Value="The network you are connected to does not allow encrypted connections.  Find another network to use."/>
+						</RegistryKey>
 					</RegistryKey>
 				</RegistryKey>
 			</Component>
