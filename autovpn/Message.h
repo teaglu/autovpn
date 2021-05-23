@@ -51,6 +51,7 @@ typedef struct _AutoVPNHeader {
 #define AVS_INTERNET				0x04		// Offsite with internet
 #define AVS_VPN_ENABLED				0x05		// Offsite with VPN trying
 #define AVS_VPN_CONNECTED			0x06		// Offsite with VPN connected
+#define AVS_VPN_DISABLED			0x07		// Disabled by headend
 
 typedef struct _AutoVPNStatus {
 	short state;

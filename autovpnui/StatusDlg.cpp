@@ -222,6 +222,7 @@ void StatusDlg::Paint(CDC& dc, RECT& area)
 	case AVS_NETWORK:
 	case AVS_INTRANET:
 	case AVS_INTERNET:
+	case AVS_VPN_DISABLED:
 	case AVS_VPN_ENABLED:
 	case AVS_VPN_CONNECTED:
 		if (wifiProblem) {
@@ -256,6 +257,7 @@ void StatusDlg::Paint(CDC& dc, RECT& area)
 	case AVS_INTERNET:
 	case AVS_VPN_ENABLED:
 	case AVS_VPN_CONNECTED:
+	case AVS_VPN_DISABLED:
 		color = naColor;
 		break;
 	}
@@ -284,6 +286,7 @@ void StatusDlg::Paint(CDC& dc, RECT& area)
 	case AVS_INTERNET:
 	case AVS_VPN_ENABLED:
 	case AVS_VPN_CONNECTED:
+	case AVS_VPN_DISABLED:
 		color = goodColor;
 		break;
 	}
@@ -305,12 +308,19 @@ void StatusDlg::Paint(CDC& dc, RECT& area)
 	case AVS_INTRANET:
 		color = naColor;
 		break;
+
 	case AVS_INTERNET:
 		color = badColor;
 		break;
+
 	case AVS_VPN_ENABLED:
 	case AVS_VPN_CONNECTED:
 		color = goodColor;
+		break;
+
+	case AVS_VPN_DISABLED:
+		color = warningColor;
+		label = _T("VPN Disabled");
 		break;
 	}
 	dc.FillSolidRect(&indVpnEnabled, color);

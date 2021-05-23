@@ -203,6 +203,19 @@ int wmain(int argc, wchar_t **argv)
 	setCurrentDirectory();
 	Log::init((argc <= 1) ? _T("error.log") : (LPCTSTR)NULL);
 
+	{
+		// This is needed for EnableHostname to check DNS
+
+		WSADATA winsockData;
+		ZeroMemory(&winsockData, sizeof(WSADATA));
+		int winsockStatus = WSAStartup(MAKEWORD(2, 2), &winsockData);
+		if (winsockStatus != 0) {
+			Log::log(LOG_ERROR,
+				_T("Error 0x%08X starting Winsock"),
+				winsockStatus);
+		}
+	}
+
 	if (argc > 1) {
 		if (wcscmp(argv[1], _T("/console")) == 0) {
 			// Be nice and install a control-c handler
@@ -238,4 +251,6 @@ int wmain(int argc, wchar_t **argv)
 			Log::log(LOG_ERROR, _T("Error entering service dispatch: {w32err}"));
 		}
 	}
+
+	WSACleanup();
 }

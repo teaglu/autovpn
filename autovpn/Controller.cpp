@@ -75,6 +75,98 @@ void Controller::stop()
 	wake.notify_all();
 }
 
+bool Controller::checkEnabled(Settings& settings)
+{
+	bool enabled = true;
+
+	CString enableHostname;
+	settings.readString(_T("EnableHostname"), enableHostname);
+
+	if (!enableHostname.IsEmpty()) {
+		ADDRINFOEXW hints;
+
+		// Winsock is picky about several members being 0 or null, this isn't
+		// just cargo cult - it's in the docs
+		ZeroMemory(&hints, sizeof(ADDRINFOEXW));
+
+		// Only resolve if we have an actual address - this should save pointless
+		// queries if we're not on the network.
+		hints.ai_flags = AI_ADDRCONFIG;
+
+		// Our flags are A (IPv4) records, so that's all we care about
+		hints.ai_family = AF_INET;
+
+		// This doesn't really matter, but a VPN is more likely than not to be UDP
+		hints.ai_socktype = SOCK_DGRAM;
+		hints.ai_protocol = IPPROTO_UDP;
+
+		PADDRINFOEXW results= NULL;
+
+		INT status = GetAddrInfoEx(enableHostname,
+			NULL, NS_DNS, NULL, &hints, &results, NULL, NULL, NULL, NULL);
+
+		// I can't find it actually stated in the docs that if you get NO_RESULT the
+		// result has to be filled in.  I don't know why it wouldn't though.
+		if ((status == NO_ERROR) && (results != NULL)) {
+			if (results->ai_addrlen > 0) {
+				// Every version of sockaddr has family in the first member, so this
+				// is safe as long as we check the family first
+				struct sockaddr_in* found4 =
+					reinterpret_cast<struct sockaddr_in*>
+					(&results->ai_addr[0]);
+
+				// We only asked for IPV4, but be defensive
+				if (found4->sin_family == AF_INET) {
+					unsigned long rawIp = ntohl(found4->sin_addr.S_un.S_addr);
+
+					// Use 127.0.0.2 to mean enabled and 127.0.0.3 to mean disabled.
+					//
+					// 1) I wanted to use A records because it's the most widely-implemented
+					//    type - most web providers these days implement TXT at least, but
+					//    A records are a lowest common denominator.
+					//
+					// 2) We can't use existence or non-existence because some ISPs
+					//    (as well as OpenDNS) will return a server of theirs instead
+					//    of NXDOMAIN.  So we have to use something that can't normally
+					//    occur on the open internet.
+					//
+					// 3) It used to be common practice to put localhost in zone files, or
+					//    I used to see it done.  So I'm avoiding 127.0.0.1.
+					//
+					// 4) AFAIK the alternate loopback addresses aren't in common use.  I
+					//    think I've seen them used for proxies with some ASA web portal
+					//    stuff, but I can't think of anywhere else.
+					//
+					// 5) There's precident in how some DNSRBLs are implemented.
+					//
+					if (rawIp == 0x7F000002) {
+						enabled = true;
+					} else if (rawIp == 0x7F000003) {
+						enabled = false;
+					} else {
+						// This is DEBUG because we don't want to spam the log if we're
+						// behind something that won't return NXDOMAIN
+
+						Log::log(LOG_DEBUG,
+							_T("Enable hostname value 0x08X not understood"),
+							rawIp);
+					}
+				}
+			}
+
+			FreeAddrInfoEx(results);
+			results = NULL;
+		} else {
+			if (status != WSAHOST_NOT_FOUND) {
+				Log::log(LOG_WARNING,
+					_T("Unable to query for disabled hostname: %d"), status);
+			}
+		}
+	}
+
+	return enabled;
+}
+
 void Controller::cycle()
 {
 	// I realize that this pulls the settings from the registry every cycle which isn't
@@ -135,8 +227,13 @@ void Controller::cycle()
 			// For now we assume we have internet connectivity.  Later on if the VPN isn't
 			// connected we run an HTTP check to make sure we can actually get to the -
 			// that way the user indication will make more sense.
-			newStatus.state = AVS_INTERNET;
-			vpnShouldBeRunning = true;
+
+			if (!checkEnabled(settings)) {
+				newStatus.state = AVS_VPN_DISABLED;
+			} else {
+				newStatus.state = AVS_INTERNET;
+				vpnShouldBeRunning = true;
+			}
 		} else {
 			newStatus.state = AVS_INTRANET;
 		}

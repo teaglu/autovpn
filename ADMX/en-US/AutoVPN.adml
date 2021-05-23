@@ -30,7 +30,9 @@ This subnet does not have to exactly match what is present on the computer's net
 	  
 Note that if you have a root certificate installed for *your* SSL Inspection firewall, this check will not fail because the WinHttp library is used for the check, and that library uses the windows certificate store.</string>
 	  <string id="EncryptedInternetContent">Encrypted Verification Expected Content</string>
-	  <string id="EncryptedInternetContent_Explain">This value is compared to the result of the encrypted internet URL, to determine if content is being changed in transit.  This is effectively an encrypted form of NCSI.</string>	  
+	  <string id="EncryptedInternetContent_Explain">This value is compared to the result of the encrypted internet URL, to determine if content is being changed in transit.  This is effectively an encrypted form of NCSI.</string>
+  	  <string id="EnableHostname">Enable Hostname</string>
+	  <string id="EnableHostname_Explain">This value is used to enable or disable the VPN client based on a DNS entry.  If this hostname resolves to 127.0.0.2 the VPN connection will be enabled, and if it resolves to 127.0.0.3 it will be disabled.  If the value is not defined no lookup is done.  If the hostname does not resolve the connection will be enabled.</string>
     </stringTable>
 	<presentationTable>
 	  <presentation id="VPNServiceName">
@@ -78,6 +80,12 @@ Note that if you have a root certificate installed for *your* SSL Inspection fir
 	  <presentation id="EncryptedInternetContent">
         <textBox refId="EncryptedInternetContent">
           <label>Encrypted Verification Expected Content</label>
+          <defaultValue></defaultValue>
+        </textBox>
+	  </presentation>
+	  <presentation id="EnableHostname">
+        <textBox refId="EnableHostname">
+          <label>Enable Hostname</label>
           <defaultValue></defaultValue>
         </textBox>
 	  </presentation>

@@ -77,5 +77,12 @@
         <text id="EncryptedInternetContent" valueName="EncryptedInternetContent" required="true" />
       </elements>
     </policy>
+    <policy name="EnableHostname" class="Machine" displayName="$(string.EnableHostname)" presentation="$(presentation.EnableHostname)" explainText="$(string.EnableHostname_Explain)" key="Software\Policies\Teaglu\AutoVPN">
+	  <parentCategory ref="AutoVPN"/>
+      <supportedOn ref="windows:SUPPORTED_Windows7" />
+      <elements>
+        <text id="EnableHostname" valueName="EnableHostname" required="true" />
+      </elements>
+    </policy>
   </policies>
 </policyDefinitions>

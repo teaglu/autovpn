@@ -41,6 +41,7 @@ private:
 	list<StatusListener*> statusListeners;
 	DiagnosticsV1 *diagnostics;
 
+	bool checkEnabled(Settings& settings);
 	void loadInternalNetworks(Settings &, list<shared_ptr<Ip4Network>>&);
 	void loadAttachedNetworks(list<shared_ptr<Ip4Network>>&, bool &foundEthernet, bool &foundWifi, bool &foundVpnAdapter);
 	void getWifiInfo(AutoVPNStatus& status);
