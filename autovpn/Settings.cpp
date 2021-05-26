@@ -13,16 +13,12 @@ Settings::Settings()
 {
 	loadPolicyRoot();
 	loadPreferenceRoot();
-
-	Log::log(LOG_DEBUG, _T("Settings ALLOC type 1, POLR=%d, PRER=%d"), policyRoot, preferenceRoot);
 }
 
 Settings::Settings(HKEY policyRoot, HKEY preferenceRoot)
 {
 	this->policyRoot = policyRoot;
 	this->preferenceRoot = preferenceRoot;
-
-	Log::log(LOG_DEBUG, _T("Settings ALLOC type 2"));
 }
 
 Settings Settings::getSubKey(LPCTSTR name)
@@ -53,7 +49,6 @@ Settings::~Settings()
 	if (preferenceRoot != NULL) {
 		RegCloseKey(preferenceRoot);
 	}
-	Log::log(LOG_DEBUG, _T("Settings FREE"));
 }
 
 void Settings::loadPreferenceRoot()

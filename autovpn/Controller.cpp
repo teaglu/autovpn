@@ -537,6 +537,8 @@ void Controller::loadAttachedNetworks(list<shared_ptr<Ip4Network>>& attachedList
 			}
 		}
 	}
+
+	delete[] buffer;
 }
 
 void Controller::getWifiInfo(AutoVPNStatus &status)
