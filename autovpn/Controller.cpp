@@ -396,61 +396,63 @@ void Controller::loadInternalNetworks(Settings &settings, list<shared_ptr<Ip4Net
 {
 	for (int pass= 0; pass < 2; pass++) {
 		HKEY root = (pass > 0) ? settings.getPreferenceRoot() : settings.getPolicyRoot();
+		if (root != NULL) {
+			HKEY internalKey;
+			DWORD regStatus = RegOpenKeyEx(root,
+				_T("InternalNetworks"), 0, KEY_QUERY_VALUE, &internalKey);
 
-		HKEY internalKey;
-		DWORD regStatus= RegOpenKeyEx(root,
-			_T("InternalNetworks"), 0, KEY_QUERY_VALUE, &internalKey);
+			if (regStatus == ERROR_SUCCESS) {
+				DWORD index = 0;
+				while (true) {
+					TCHAR name[MAX_NETWORK_KEY_NAME + 1];
+					DWORD nameLen = MAX_NETWORK_KEY_NAME;
+					TCHAR value[MAX_NETWORK_KEY_VALUE + 1];
+					DWORD valueLen = MAX_NETWORK_KEY_VALUE * sizeof(TCHAR);
 
-		if (regStatus == ERROR_SUCCESS) {
-			DWORD index = 0;
-			while (true) {
-				TCHAR name[MAX_NETWORK_KEY_NAME + 1];
-				DWORD nameLen = MAX_NETWORK_KEY_NAME;
-				TCHAR value[MAX_NETWORK_KEY_VALUE + 1];
-				DWORD valueLen = MAX_NETWORK_KEY_VALUE * sizeof(TCHAR);
+					DWORD regType = 0;
 
-				DWORD regType = 0;
+					regStatus = RegEnumValue(internalKey, index,
+						name, &nameLen, NULL, &regType, (LPBYTE)value, &valueLen);
 
-				regStatus = RegEnumValue(internalKey, index,
-					name, &nameLen, NULL, &regType, (LPBYTE)value, &valueLen);
+					if (regStatus == ERROR_NO_MORE_ITEMS) {
+						break;
+					} else if (regStatus == ERROR_SUCCESS) {
+						value[valueLen / sizeof(TCHAR)] = '\0';
 
-				if (regStatus == ERROR_NO_MORE_ITEMS) {
-					break;
-				} else if (regStatus == ERROR_SUCCESS) {
-					value[valueLen / sizeof(TCHAR)] = '\0';
+						CString splitBuf(value);
 
-					CString splitBuf(value);
+						LPCTSTR tokens = _T(" ,;");
 
-					LPCTSTR tokens = _T(" ,;");
+						int tokenPos = 0;
+						CString token = splitBuf.Tokenize(tokens, tokenPos);
+						while (!token.IsEmpty()) {
+							shared_ptr<Ip4Network> network = Ip4Network::Create(token);
+							if (network) {
+								trustedNetworks.push_back(network);
+							}
+							else {
+								Log::log(LOG_DEBUG,
+									_T("Unable to understand network %s"), (LPCTSTR)token);
+							}
 
-					int tokenPos = 0;
-					CString token = splitBuf.Tokenize(tokens, tokenPos);
-					while (!token.IsEmpty()) {
-						shared_ptr<Ip4Network> network = Ip4Network::Create(token);
-						if (network) {
-							trustedNetworks.push_back(network);
-						} else {
-							Log::log(LOG_DEBUG,
-								_T("Unable to understand network %s"), (LPCTSTR)token);
+							token = splitBuf.Tokenize(tokens, tokenPos);
 						}
 
-						token = splitBuf.Tokenize(tokens, tokenPos);
+						index++;
+					} else {
+						Log::log(LOG_ERROR,
+							_T("Error enumeriting trusted networks: 0x%08X"),
+							regStatus);
+						break;
 					}
-
-					index++;
-				} else {
-					Log::log(LOG_ERROR,
-						_T("Error enumeriting trusted networks: 0x%08X"),
-						regStatus);
-					break;
 				}
-			}
 
-			RegCloseKey(internalKey);
-		} else {
-			Log::log(LOG_ERROR,
-				_T("Error opening internal network registry key: 0x%08X"),
-				regStatus);
+				RegCloseKey(internalKey);
+			} else if (regStatus != ERROR_FILE_NOT_FOUND) {
+				Log::log(LOG_ERROR,
+					_T("Error opening internal network registry key: 0x%08X"),
+					regStatus);
+			}
 		}
 	}
 }
